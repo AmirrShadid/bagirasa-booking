@@ -4,7 +4,7 @@ import { useState } from 'react';
 import AdminDashboard from './dashboard-content'; // Kita pecahkan komponen ni nanti
 
 export default function AdminPage() {
-  const [password, setPassword] = useState('230187Sa@');
+  const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const checkPassword = (e: React.FormEvent) => {
