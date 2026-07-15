@@ -74,33 +74,25 @@ export default function AdminDashboard() {
             </thead>
             <tbody className="divide-y divide-stone-100">
               {bookings && bookings.length > 0 ? (
-                bookings.map((b) => {
-                  const getQty = (itemName: string) => {
-                    const item = b.items?.find((i: any) => i.name === itemName);
-                    return item ? item.quantity : 0;
-                  };
-
-                  return (
-                    <tr key={b.id} className="hover:bg-stone-50 transition-colors">
-                      <td className="px-6 py-4 font-semibold text-stone-800">{b.customer_name}</td>
-                      <td className="px-6 py-4 text-stone-600 font-mono text-sm">{b.phone}</td>
-                      <td className="px-6 py-4">
-                        <td>
-                          {order.items.map((item, index) => (
-                            <div key={index}>
-                              {item.quantity} × {item.name}
-                            </div>
-                          ))}
-                        </td>                      
-                      <td className="px-6 py-4 text-stone-600">
-                        {new Date(b.pickup_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                      </td>
-                      <td className="px-6 py-4 font-bold text-stone-900">
-                        RM {Number(b.total_price || 0).toFixed(2)}
-                      </td>
-                    </tr>
-                  );
-                })
+                bookings.map((b) => (
+                  <tr key={b.id} className="hover:bg-stone-50 transition-colors">
+                    <td className="px-6 py-4 font-semibold text-stone-800">{b.customer_name}</td>
+                    <td className="px-6 py-4 text-stone-600 font-mono text-sm">{b.phone}</td>
+                    <td className="px-6 py-4">
+                      {b.items && b.items.map((item: any, idx: number) => (
+                        <div key={idx} className="text-sm text-stone-700">
+                          <span className="font-semibold">{item.quantity}×</span> {item.name}
+                        </div>
+                      ))}
+                    </td>
+                    <td className="px-6 py-4 text-stone-600">
+                      {new Date(b.pickup_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                    </td>
+                    <td className="px-6 py-4 font-bold text-stone-900">
+                      RM {Number(b.total_price || 0).toFixed(2)}
+                    </td>
+                  </tr>
+                ))
               ) : (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-stone-400 italic">
