@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 // Masukkan password rahsia kau kat sini
-const SECRET_PASSWORD = "kopi123"; 
+const SECRET_PASSWORD = "230187Sa@"; 
 
 export default function AdminPage() {
   const [password, setPassword] = useState('');
