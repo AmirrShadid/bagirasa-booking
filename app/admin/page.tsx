@@ -85,11 +85,13 @@ export default function AdminDashboard() {
                       <td className="px-6 py-4 font-semibold text-stone-800">{b.customer_name}</td>
                       <td className="px-6 py-4 text-stone-600 font-mono text-sm">{b.phone}</td>
                       <td className="px-6 py-4">
-                        <div className="flex flex-col text-xs space-y-0.5 text-stone-600">
-                          <span>{getQty('Original Salt Bread')} × Original</span>
-                          <span>{getQty('Chocolate Salt Bread')} × Chocolate</span>
-                        </div>
-                      </td>
+                        <td>
+                          {order.items.map((item, index) => (
+                            <div key={index}>
+                              {item.quantity} × {item.name}
+                            </div>
+                          ))}
+                        </td>                      
                       <td className="px-6 py-4 text-stone-600">
                         {new Date(b.pickup_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                       </td>
