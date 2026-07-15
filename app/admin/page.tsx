@@ -10,96 +10,71 @@ const supabase = createClient(
 
 export default function AdminDashboard() {
   const [bookings, setBookings] = useState<any[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
-    async function fetchBookings() {
-      const { data } = await supabase
-        .from('bookings')
-        .select('*')
-        .order('created_at', { ascending: false });
-      
-      if (data) setBookings(data);
-    }
     fetchBookings();
+    fetchProducts();
   }, []);
 
-  const exportToCSV = () => {
-    const headers = ["Customer", "Phone", "Original", "Chocolate", "Pickup", "Total"];
-    const rows = bookings.map(b => [
-      b.customer_name,
-      b.phone,
-      b.items?.find((i: any) => i.name === 'Original Salt Bread')?.quantity || 0,
-      b.items?.find((i: any) => i.name === 'Chocolate Salt Bread')?.quantity || 0,
-      new Date(b.pickup_time).toLocaleTimeString(),
-      b.total_price
-    ]);
+  async function fetchBookings() {
+    const { data } = await supabase.from('bookings').select('*').order('created_at', { ascending: false });
+    if (data) setBookings(data);
+  }
 
-    const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `Bagirasa_Sales_${new Date().toLocaleDateString()}.csv`;
-    a.click();
+  async function fetchProducts() {
+    const { data } = await supabase.from('products').select('*');
+    if (data) setProducts(data);
+  }
+
+  const updateStock = async (id: string, newStock: number) => {
+    const { error } = await supabase.from('products').update({ stock: newStock }).eq('id', id);
+    if (!error) fetchProducts();
   };
 
   return (
-    <div className="min-h-screen bg-stone-50 p-8">
-      <div className="max-w-5xl mx-auto">
-        {/* Header Section */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-stone-900">Bagirasa Dashboard</h1>
-            <p className="text-stone-500">Overview of today's bread reservations</p>
+    <div className="min-h-screen bg-stone-50 p-6">
+      <div className="max-w-3xl mx-auto space-y-6">
+        
+        {/* Stock Control Panel */}
+        <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+          <h2 className="text-lg font-bold mb-4">Stock Control</h2>
+          <div className="grid grid-cols-2 gap-4">
+            {products.map((p) => (
+              <div key={p.id} className="bg-stone-50 p-4 rounded-xl border border-stone-100 flex justify-between items-center">
+                <div>
+                  <p className="text-xs font-bold text-stone-500 uppercase">{p.name}</p>
+                  <p className="text-xl font-black">{p.stock}</p>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => updateStock(p.id, p.stock - 1)} className="w-8 h-8 bg-stone-200 rounded-lg font-bold">-</button>
+                  <button onClick={() => updateStock(p.id, p.stock + 1)} className="w-8 h-8 bg-stone-900 text-white rounded-lg font-bold">+</button>
+                </div>
+              </div>
+            ))}
           </div>
-          <button 
-            onClick={exportToCSV}
-            className="bg-stone-900 hover:bg-stone-800 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all"
-          >
-            EXPORT CSV
-          </button>
         </div>
 
-        {/* Card Container */}
+        {/* Orders Table */}
         <div className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-stone-50 border-b border-stone-200">
               <tr>
-                <th className="px-6 py-4 text-xs font-bold text-stone-400 uppercase tracking-wider">Customer</th>
-                <th className="px-6 py-4 text-xs font-bold text-stone-400 uppercase tracking-wider">Contact</th>
-                <th className="px-6 py-4 text-xs font-bold text-stone-400 uppercase tracking-wider">Order</th>
-                <th className="px-6 py-4 text-xs font-bold text-stone-400 uppercase tracking-wider">Pickup</th>
-                <th className="px-6 py-4 text-xs font-bold text-stone-400 uppercase tracking-wider">Total</th>
+                <th className="px-6 py-4 text-xs font-bold text-stone-400">CUSTOMER</th>
+                <th className="px-6 py-4 text-xs font-bold text-stone-400">ORDER</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100">
-              {bookings && bookings.length > 0 ? (
-                bookings.map((b) => (
-                  <tr key={b.id} className="hover:bg-stone-50 transition-colors">
-                    <td className="px-6 py-4 font-semibold text-stone-800">{b.customer_name}</td>
-                    <td className="px-6 py-4 text-stone-600 font-mono text-sm">{b.phone}</td>
-                    <td className="px-6 py-4">
-                      {b.items && b.items.map((item: any, idx: number) => (
-                        <div key={idx} className="text-sm text-stone-700">
-                          <span className="font-semibold">{item.quantity}×</span> {item.name}
-                        </div>
-                      ))}
-                    </td>
-                    <td className="px-6 py-4 text-stone-600">
-                      {new Date(b.pickup_time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                    </td>
-                    <td className="px-6 py-4 font-bold text-stone-900">
-                      RM {Number(b.total_price || 0).toFixed(2)}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-stone-400 italic">
-                    {bookings ? "No active reservations found." : "Loading..."}
+              {bookings.map((b) => (
+                <tr key={b.id}>
+                  <td className="px-6 py-4 font-semibold">{b.customer_name}</td>
+                  <td className="px-6 py-4">
+                    {b.items?.map((item: any, i: number) => (
+                      <div key={i} className="text-sm">{item.quantity}× {item.name}</div>
+                    ))}
                   </td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
