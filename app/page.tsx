@@ -229,24 +229,24 @@ export default function BookingPage() {
           </div>
           <div className="grid grid-cols-3 gap-3">
             {/* Box 1: Original Salt Bread Stock */}
-            <div className="bg-stone-100 rounded-lg p-4 text-center border border-stone-200/60">
-              <span className="block text-3xl font-serif text-stone-900">
-                {breads.find(b => b.name === 'Original Salt Bread')?.available_stock ?? 20}
-              </span>
-              <span className="text-[10px] font-bold tracking-wider text-stone-400 uppercase block mt-1">
-                Original
-              </span>
-            </div>
+              <div className="bg-stone-100 rounded-lg p-4 text-center border border-stone-200/60">
+                <span className="block text-3xl font-serif text-stone-900">
+                  {breads.find(b => b.name === 'Original Salt Bread')?.available_stock ?? 0}
+                </span>
+                <span className="text-[10px] font-bold tracking-wider text-stone-400 uppercase block mt-1">
+                  Original
+                </span>
+              </div>
 
-            {/* Box 2: Chocolate Salt Bread Stock */}
-            <div className="bg-stone-100 rounded-lg p-4 text-center border border-stone-200/60">
-              <span className="block text-3xl font-serif text-stone-900">
-                {breads.find(b => b.name === 'Chocolate Salt Bread')?.available_stock ?? 0}
-              </span>
-              <span className="text-[10px] font-bold tracking-wider text-stone-400 uppercase block mt-1">
-                Chocolate
-              </span>
-            </div>
+              {/* Box 2: Chocolate Salt Bread Stock */}
+              <div className="bg-stone-100 rounded-lg p-4 text-center border border-stone-200/60">
+                <span className="block text-3xl font-serif text-stone-900">
+                  {breads.find(b => b.name === 'Chocolate Salt Bread')?.available_stock ?? 0}
+                </span>
+                <span className="text-[10px] font-bold tracking-wider text-stone-400 uppercase block mt-1">
+                  Chocolate
+                </span>
+              </div>
 
             {/* Box 3: User's Booking Status */}
             <div className={`rounded-lg p-4 text-center border transition-all duration-300 ${
