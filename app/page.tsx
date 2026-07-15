@@ -68,10 +68,16 @@ export default function BookingPage() {
 
     const { data, error: fetchError } = await supabase
       .from("salt_breads")
-      .select("id, name, price, stock")
+      .select("id, name, price, available_stock")
       .order("name");
 
     if (fetchError) {
+      console.error("fetchMenu failed:", {
+        message: fetchError.message,
+        details: fetchError.details,
+        hint: fetchError.hint,
+        code: fetchError.code,
+      });
       setError("Unable to load menu. Please refresh and try again.");
       setBreads([]);
     } else {
@@ -105,11 +111,11 @@ export default function BookingPage() {
   const hasItems = cartItems.length > 0;
 
   function adjustQuantity(bread: SaltBread, delta: number) {
-    if (bread.stock === 0 && delta > 0) return;
+    if (bread.available_stock === 0 && delta > 0) return;
 
     setQuantities((prev) => {
       const current = prev[bread.id] ?? 0;
-      const next = Math.max(0, Math.min(bread.stock, current + delta));
+      const next = Math.max(0, Math.min(bread.available_stock, current + delta));
       return { ...prev, [bread.id]: next };
     });
   }
@@ -143,7 +149,7 @@ export default function BookingPage() {
       const selectedIds = cartItems.map((item) => item.bread_id);
       const { data: freshBreads, error: stockError } = await supabase
         .from("salt_breads")
-        .select("id, name, price, stock")
+        .select("id, name, price, available_stock")
         .in("id", selectedIds);
 
       if (stockError || !freshBreads) {
@@ -154,7 +160,7 @@ export default function BookingPage() {
 
       for (const item of cartItems) {
         const fresh = stockMap.get(item.bread_id);
-        if (!fresh || fresh.stock < item.quantity) {
+        if (!fresh || fresh.available_stock < item.quantity) {
           throw new Error(
             `${item.name} no longer has enough stock. Please adjust your order.`,
           );
@@ -163,11 +169,11 @@ export default function BookingPage() {
 
       for (const item of cartItems) {
         const fresh = stockMap.get(item.bread_id)!;
-        const newStock = fresh.stock - item.quantity;
+        const newStock = fresh.available_stock - item.quantity;
 
         const { error: updateError } = await supabase
           .from("salt_breads")
-          .update({ stock: newStock })
+          .update({ available_stock: newStock })
           .eq("id", item.bread_id);
 
         if (updateError) {
@@ -347,7 +353,7 @@ export default function BookingPage() {
             <ul className="space-y-3">
               {breads.map((bread) => {
                 const qty = quantities[bread.id] ?? 0;
-                const soldOut = bread.stock === 0;
+                const soldOut = bread.available_stock === 0;
 
                 return (
                   <li
@@ -372,7 +378,7 @@ export default function BookingPage() {
                         <p className="mt-0.5 text-xs text-stone-400">
                           {soldOut
                             ? "Restocking soon"
-                            : `${bread.stock} left in stock`}
+                            : `${bread.available_stock} left in stock`}
                         </p>
                       </div>
 
@@ -392,7 +398,7 @@ export default function BookingPage() {
                         <button
                           type="button"
                           onClick={() => adjustQuantity(bread, 1)}
-                          disabled={soldOut || qty >= bread.stock}
+                          disabled={soldOut || qty >= bread.available_stock}
                           aria-label={`Increase ${bread.name} quantity`}
                           className="flex h-9 w-9 items-center justify-center rounded-full border border-stone-900 bg-stone-900 text-white transition-colors hover:bg-stone-800 disabled:cursor-not-allowed disabled:border-stone-200 disabled:bg-stone-100 disabled:text-stone-300"
                         >

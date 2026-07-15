@@ -9,7 +9,7 @@ export type SaltBread = {
   id: string;
   name: string;
   price: number;
-  stock: number;
+  available_stock: number;
 };
 
 export type BookingItem = {
