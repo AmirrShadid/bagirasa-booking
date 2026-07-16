@@ -24,7 +24,7 @@ export default function AdminPage() {
     if (isAuth) fetchBookings();
   }, [isAuth]);
 
-  // Fungsi untuk update status
+  // Fungsi untuk update status secara real-time
   async function markAsPicked(id: string) {
     const { error } = await supabase
       .from('bookings')
