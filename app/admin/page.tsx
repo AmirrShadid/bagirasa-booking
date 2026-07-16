@@ -12,6 +12,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState('');
   const [isAuth, setIsAuth] = useState(false);
   const [bookings, setBookings] = useState<any[]>([]);
+  const [filter, setFilter] = useState<'pending' | 'picked_up'>('pending');
 
   useEffect(() => {
     async function fetchBookings() {
@@ -64,6 +65,23 @@ export default function AdminPage() {
       <div className="max-w-5xl mx-auto">
         <h1 className="text-2xl font-bold text-stone-900 mb-8">Bagirasa Admin Dashboard</h1>
         
+        {/* Tab Filter */}
+        <div className="flex gap-2 mb-6">
+          {(['pending', 'picked_up'] as const).map((status) => (
+            <button
+              key={status}
+              onClick={() => setFilter(status)}
+              className={`px-4 py-2 rounded-lg text-xs font-bold uppercase transition-all ${
+                filter === status 
+                ? 'bg-stone-900 text-white' 
+                : 'bg-white border border-stone-200 text-stone-600 hover:bg-stone-100'
+              }`}
+            >
+              {status === 'picked_up' ? 'Completed' : status}
+            </button>
+          ))}
+        </div>
+
         <div className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-stone-100 border-b border-stone-200">
@@ -76,7 +94,9 @@ export default function AdminPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100">
-              {bookings.length > 0 ? bookings.map((b) => (
+              {bookings
+                .filter(b => (b.status || 'pending') === filter)
+                .map((b) => (
                 <tr key={b.id} className={`${b.status === 'picked_up' ? 'bg-stone-50 opacity-60' : 'hover:bg-stone-50'} transition-all`}>
                   <td className="px-6 py-4 font-semibold text-stone-900">{b.customer_name}</td>
                   <td className="px-6 py-4 text-sm text-stone-700 font-medium">
@@ -101,11 +121,7 @@ export default function AdminPage() {
                     )}
                   </td>
                 </tr>
-              )) : (
-                <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-stone-500 italic">No bookings found.</td>
-                </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
