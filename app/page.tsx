@@ -157,7 +157,7 @@ export default function BookingPage() {
 
       const sendWhatsApp = (name: string, total: number) => {
       const phone = "60148564742"; // Ganti dengan nombor WhatsApp kau (format antarabangsa)
-      const message = `Hai Amir, ada tempahan baru!%0A%0ANama: ${name}%0ATotal: RM${total.toFixed(2)}%0A%0ASila semak dashboard untuk butiran lanjut.`;
+      const message = `Hai Bagirasa, ada tempahan baru!%0A%0ANama: ${name}%0ATotal: RM${total.toFixed(2)}%0A%0ASila semak dashboard untuk butiran lanjut.`;
       window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
     };
 
