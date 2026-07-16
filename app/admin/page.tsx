@@ -25,15 +25,22 @@ export default function AdminPage() {
     if (isAuth) fetchBookings();
   }, [isAuth]);
 
-  // Fungsi untuk update status secara real-time
+  // Fungsi untuk update status yang dikukuhkan
   async function markAsPicked(id: string) {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('bookings')
       .update({ status: 'picked_up' })
-      .eq('id', id);
-    
-    if (!error) {
-      setBookings(bookings.map(b => b.id === id ? { ...b, status: 'picked_up' } : b));
+      .eq('id', id)
+      .select(); // Memastikan data yang dikemaskini dipulangkan
+
+    if (error) {
+      console.error("Gagal update:", error);
+      alert("Gagal update! Sila semak RLS Policy di Supabase.");
+      return;
+    }
+
+    if (data) {
+      setBookings(prev => prev.map(b => b.id === id ? { ...b, status: 'picked_up' } : b));
     }
   }
 
@@ -95,7 +102,7 @@ export default function AdminPage() {
             </thead>
             <tbody className="divide-y divide-stone-100">
               {bookings
-                .filter(b => (b.status || 'pending') === filter)
+                .filter(b => (b.status || 'pending').toLowerCase().trim() === filter)
                 .map((b) => (
                 <tr key={b.id} className={`${b.status === 'picked_up' ? 'bg-stone-50 opacity-60' : 'hover:bg-stone-50'} transition-all`}>
                   <td className="px-6 py-4 font-semibold text-stone-900">{b.customer_name}</td>
