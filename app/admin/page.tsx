@@ -18,11 +18,23 @@ export default function AdminPage() {
       const { data } = await supabase
         .from('bookings')
         .select('*')
-        .order('pickup_time', { ascending: true }); // Susun ikut waktu pickup
+        .order('pickup_time', { ascending: true });
       if (data) setBookings(data);
     }
     if (isAuth) fetchBookings();
   }, [isAuth]);
+
+  // Fungsi untuk update status
+  async function markAsPicked(id: string) {
+    const { error } = await supabase
+      .from('bookings')
+      .update({ status: 'picked_up' })
+      .eq('id', id);
+    
+    if (!error) {
+      setBookings(bookings.map(b => b.id === id ? { ...b, status: 'picked_up' } : b));
+    }
+  }
 
   if (!isAuth) {
     return (
@@ -48,9 +60,10 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white p-8 font-sans">
+    <div className="min-h-screen bg-stone-50 p-8 font-sans">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-2xl font-bold text-stone-900 mb-8">Bagirasa Admin Dashboard</h1>
+        
         <div className="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden">
           <table className="w-full text-left">
             <thead className="bg-stone-100 border-b border-stone-200">
@@ -59,11 +72,12 @@ export default function AdminPage() {
                 <th className="px-6 py-4 text-xs font-bold text-stone-600 uppercase tracking-wider">Pickup</th>
                 <th className="px-6 py-4 text-xs font-bold text-stone-600 uppercase tracking-wider">Order</th>
                 <th className="px-6 py-4 text-xs font-bold text-stone-600 uppercase tracking-wider">Total</th>
+                <th className="px-6 py-4 text-xs font-bold text-stone-600 uppercase tracking-wider">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100">
               {bookings.length > 0 ? bookings.map((b) => (
-                <tr key={b.id} className="hover:bg-stone-50 transition-colors">
+                <tr key={b.id} className={`${b.status === 'picked_up' ? 'bg-stone-50 opacity-60' : 'hover:bg-stone-50'} transition-all`}>
                   <td className="px-6 py-4 font-semibold text-stone-900">{b.customer_name}</td>
                   <td className="px-6 py-4 text-sm text-stone-700 font-medium">
                     {new Date(b.pickup_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -74,10 +88,22 @@ export default function AdminPage() {
                     ))}
                   </td>
                   <td className="px-6 py-4 font-bold text-stone-900">RM {Number(b.total_price || 0).toFixed(2)}</td>
+                  <td className="px-6 py-4">
+                    {b.status !== 'picked_up' ? (
+                      <button 
+                        onClick={() => markAsPicked(b.id)}
+                        className="text-[10px] bg-emerald-600 text-white px-3 py-1.5 rounded-md font-bold hover:bg-emerald-700 uppercase transition-colors"
+                      >
+                        Pick Up
+                      </button>
+                    ) : (
+                      <span className="text-[10px] font-bold text-stone-400 uppercase bg-stone-200 px-2 py-1 rounded">Done</span>
+                    )}
+                  </td>
                 </tr>
               )) : (
                 <tr>
-                  <td colSpan={4} className="px-6 py-12 text-center text-stone-500 italic">No bookings found.</td>
+                  <td colSpan={5} className="px-6 py-12 text-center text-stone-500 italic">No bookings found.</td>
                 </tr>
               )}
             </tbody>
