@@ -212,7 +212,7 @@ export default function BookingPage() {
             Crafted Fresh, Worth the Wait.
           </h1>
           <p className="text-stone-500 text-sm sm:text-base font-normal max-w-md mx-auto pt-2">
-            A premium viral salt bread (Sio Pan) baked with layers of high-grade churned butter, pristine mineral sea salt, and dynamic locking inventory to guarantee your batch is coming hot straight from our oven.
+            A premium viral salt bread (Shio Pan) baked with layers of high-grade churned butter, pretzel salt, and dynamic locking inventory to guarantee your batch is coming hot straight from our oven.
           </p>
         </div>
 
@@ -317,7 +317,7 @@ export default function BookingPage() {
                   <p className="text-stone-400 text-xs font-normal leading-relaxed">
                     {bread.name === 'Original Salt Bread' && 'Our signature golden roll: crispy exterior, buttery pillowy center, sprinkled with coarse Maldon sea salt.'}
                     {bread.name === 'Garlic Butter Salt Bread' && 'Infused with premium garlic herb butter and topped with grey Guérande sea salt. Rich, earthy, and aromatic.'}
-                    {bread.name === 'Chocolate Salt Bread' && 'Stuffed with 70% dark Belgian chocolate lava and finished with delicate fleur de sel. Sweet-savory perfection.'}
+                    {bread.name === 'Chocolate Salt Bread' && 'Stuffed with Callebaut chocolate and finished with delicate fleur de sel. Sweet-savory perfection.'}
                     {!['Original Salt Bread', 'Garlic Butter Salt Bread', 'Chocolate Salt Bread'].includes(bread.name) && 'Freshly baked premium artisan salt bread roll.'}
                   </p>
 
