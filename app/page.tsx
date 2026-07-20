@@ -291,6 +291,34 @@ export default function BookingPage() {
           </p>
         </div>
 
+        {/* PILIH SLOT DULU — kena pilih sebelum boleh tambah quantity roti limited */}
+        <div className="pt-2">
+          <label className="block text-[10px] font-bold tracking-widest text-stone-400 uppercase mb-2">
+            Pilih Slot Pickup (Had 7 Original & 7 Choc setiap slot)
+          </label>
+          <div className="grid grid-cols-2 gap-3">
+            {SLOTS.map((time) => (
+              <button
+                key={time}
+                type="button"
+                onClick={() => handlePickupTimeChange(time)}
+                className={`py-3 rounded-xl text-sm font-bold border transition-all ${
+                  pickupTime === time
+                    ? 'bg-stone-900 text-white border-stone-900'
+                    : 'bg-white border-stone-200 text-stone-600 hover:border-stone-400'
+                }`}
+              >
+                {time}
+              </button>
+            ))}
+          </div>
+          {!pickupTime && (
+            <p className="text-[11px] text-stone-400 mt-2">
+              * Sila pilih slot dahulu untuk melihat baki stok Original & Choc bagi slot tersebut.
+            </p>
+          )}
+        </div>
+
         {/* LIVE COUNTER — JUMLAH GABUNGAN KEDUA-DUA SLOT (14 total) */}
         <div className="py-2">
           <div className="flex justify-between items-center mb-3">
@@ -336,34 +364,6 @@ export default function BookingPage() {
               </span>
             </div>
           </div>
-        </div>
-
-        {/* PILIH SLOT DULU — kena pilih sebelum boleh tambah quantity roti limited */}
-        <div className="pt-2">
-          <label className="block text-[10px] font-bold tracking-widest text-stone-400 uppercase mb-2">
-            Pilih Slot Pickup (Had 7 Original & 7 Choc setiap slot)
-          </label>
-          <div className="grid grid-cols-2 gap-3">
-            {SLOTS.map((time) => (
-              <button
-                key={time}
-                type="button"
-                onClick={() => handlePickupTimeChange(time)}
-                className={`py-3 rounded-xl text-sm font-bold border transition-all ${
-                  pickupTime === time
-                    ? 'bg-stone-900 text-white border-stone-900'
-                    : 'bg-white border-stone-200 text-stone-600 hover:border-stone-400'
-                }`}
-              >
-                {time}
-              </button>
-            ))}
-          </div>
-          {!pickupTime && (
-            <p className="text-[11px] text-stone-400 mt-2">
-              * Sila pilih slot dahulu untuk melihat baki stok Original & Choc bagi slot tersebut.
-            </p>
-          )}
         </div>
 
         {/* MENU LIST */}
