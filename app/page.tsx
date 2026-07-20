@@ -46,6 +46,22 @@ export default function BookingPage() {
 
   const isSlotLimited = (name: string) => SLOT_LIMITED_BREADS.includes(name);
 
+  // Tukar label slot ("3:30 PM") kepada timestamp yang sah untuk column timestamptz.
+  // Guna tarikh HARI INI + waktu yang dipilih.
+  const slotLabelToTimestamp = (slotLabel: string): string => {
+    const [time, modifier] = slotLabel.split(" "); // "3:30", "PM"
+    const [hoursStr, minutesStr] = time.split(":");
+    let hours = parseInt(hoursStr, 10);
+    const minutes = parseInt(minutesStr, 10);
+
+    if (modifier === "PM" && hours < 12) hours += 12;
+    if (modifier === "AM" && hours === 12) hours = 0;
+
+    const dt = new Date();
+    dt.setHours(hours, minutes, 0, 0);
+    return dt.toISOString();
+  };
+
   // ---------------------------------------------------------
   // FETCH MENU + STOCK IKUT SLOT
   // ---------------------------------------------------------
@@ -199,7 +215,7 @@ export default function BookingPage() {
         .insert({
           customer_name: customerName,
           phone: phone,
-          pickup_time: pickupTime,
+          pickup_time: slotLabelToTimestamp(pickupTime),
           total_price: calculateTotal(),
           items: itemsOrdered,
           status: 'pending',
