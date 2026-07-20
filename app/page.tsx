@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase'; // Ubah laluan ini mengikut konfigura
 // Nama roti yang kena limit ikut SLOT (7 unit / slot).
 // Roti lain (cth Garlic Butter) guna stock biasa (available_stock), tak ikut slot.
 const SLOT_LIMITED_BREADS = ['Original Salt Bread', 'Chocolate Salt Bread'];
-const SLOTS = ['3:30 PM', '8:30 PM'];
+const SLOTS = ['4:40 PM', '8:30 PM'];
 
 interface SaltBread {
   id: number; // integer/bigint dari salt_breads.id (bukan uuid)
@@ -38,7 +38,7 @@ export default function BookingPage() {
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
-  const [pickupTime, setPickupTime] = useState(""); // "3:30 PM" atau "8:30 PM"
+  const [pickupTime, setPickupTime] = useState(""); // "4:00 PM" atau "8:30 PM"
   const [loadingMenu, setLoadingMenu] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,10 +46,10 @@ export default function BookingPage() {
 
   const isSlotLimited = (name: string) => SLOT_LIMITED_BREADS.includes(name);
 
-  // Tukar label slot ("3:30 PM") kepada timestamp yang sah untuk column timestamptz.
+  // Tukar label slot ("4:00 PM") kepada timestamp yang sah untuk column timestamptz.
   // Guna tarikh HARI INI + waktu yang dipilih.
   const slotLabelToTimestamp = (slotLabel: string): string => {
-    const [time, modifier] = slotLabel.split(" "); // "3:30", "PM"
+    const [time, modifier] = slotLabel.split(" "); // "4:00", "PM"
     const [hoursStr, minutesStr] = time.split(":");
     let hours = parseInt(hoursStr, 10);
     const minutes = parseInt(minutesStr, 10);
