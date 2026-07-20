@@ -366,6 +366,16 @@ export default function BookingPage() {
           </div>
         </div>
 
+        {/* HERO IMAGE SECTION */}
+        <div className="relative w-full h-52 sm:h-64 rounded-2xl overflow-hidden border border-stone-200/40 shadow-sm my-2 bg-stone-100">
+          <img
+            src="/images/salt-bread-hero.jpeg"
+            alt="Bagirasa Salt Bread Fresh Drop"
+            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
+        </div>
+
         {/* MENU LIST */}
         <div className="space-y-6 pt-4">
           <div className="flex justify-between items-baseline border-b border-stone-200 pb-2">
