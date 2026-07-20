@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase'; // Ubah laluan ini mengikut konfigura
 // Nama roti yang kena limit ikut SLOT (7 unit / slot).
 // Roti lain (cth Garlic Butter) guna stock biasa (available_stock), tak ikut slot.
 const SLOT_LIMITED_BREADS = ['Original Salt Bread', 'Chocolate Salt Bread'];
-const SLOTS = ['4:40 PM', '8:30 PM'];
+const SLOTS = ['4:00 PM', '8:30 PM'];
 
 interface SaltBread {
   id: number; // integer/bigint dari salt_breads.id (bukan uuid)
