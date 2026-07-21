@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 
 // Roti yang dikawal ketat mengikut slot masa (Contoh: 4 ketul per slot untuk Original, 7 untuk Choc)
 const SLOT_LIMITED_BREADS = ['Original Salt Bread', 'Chocolate Salt Bread'];
-const SLOTS = ['3:30 PM', '8:30 PM'];
+const SLOTS = ['4:00 PM', '8:30 PM'];
 
 interface SaltBread {
   id: number;
@@ -280,7 +280,7 @@ export default function BookingPage() {
         {/* PILIH SLOT */}
         <div className="pt-2">
           <label className="block text-[10px] font-bold tracking-widest text-stone-400 uppercase mb-2">
-            Pilih Slot Pickup (3:30 PM atau 8:30 PM)
+            Pilih Slot Pickup (4:00 PM atau 8:30 PM)
           </label>
           <div className="grid grid-cols-2 gap-3">
             {SLOTS.map((time) => (
