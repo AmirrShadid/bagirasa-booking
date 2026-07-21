@@ -3,16 +3,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 
-// Roti yang dikawal mengikut slot masa
+// Breads managed by time slots
 const SLOT_LIMITED_BREADS = ['Original Salt Bread', 'Chocolate Salt Bread'];
 const SLOTS = ['4:00 PM', '8:30 PM'];
 
 interface SaltBread {
   id: number;
-  name: number | string; // Mengikut asal kau
+  name: number | string;
   price: number;
   available_stock: number;
-  description?: string; // Penerangan untuk setiap roti
+  description?: string;
 }
 
 interface SlotStock {
@@ -78,16 +78,15 @@ export default function BookingPage() {
 
       if (slotError) throw slotError;
 
-      // Tambah kembali deskripsi asal untuk setiap roti
       const descriptionsMap: Record<string, string> = {
-        'Original Salt Bread': 'Classic French butter wrapped in soft dough, topped with flaky sea salt.',
-        'Chocolate Salt Bread': 'Rich dark chocolate filling with a sweet and salty crust finish.',
-        'Korean Cream Cheese': 'Loaded with sweet garlic butter and premium cream cheese filling.',
-        'Garlic': 'Piping hot buttery garlic spread infused with herbs and melted cheese goodness.',
+        'Original Salt Bread': 'Crispy on the outside, soft, fluffy, and buttery on the inside. Topped with a sprinkle of pretzel salt.',
+        'Chocolate Salt Bread': 'Rich chocolate dough with a molten callebaut center, crispy crust and a pinch of pretzel salt.',
+        'Korean Cream Cheese': 'Stuffed with a rich, velvety cream cheese filling, featuring a crispy crust and a touch of pretzel salt.',
+        'Garlic': 'Brushed with aromatic garlic butter, featuring a crispy crust, a soft, fluffy interior, and a savory pretzel salt finish..',
         'Crab Rangoon': 'Crispy cheesy crab filling wrapped in our signature salt bread.'
       };
 
-      const enrichedBreads = (menuData || []).map((b) => ({
+      const enrichedBreads = (menuData || []).map((b: any) => ({
         ...b,
         description: descriptionsMap[String(b.name)] || 'Freshly baked artisan salt bread.'
       }));
@@ -96,7 +95,7 @@ export default function BookingPage() {
       setSlotStocks(slotData || []);
     } catch (err) {
       console.error("fetchMenu failed:", err);
-      setError("Gagal memuatkan menu. Sila semak sambungan Supabase.");
+      setError("Failed to load menu. Please check your Supabase connection.");
     } finally {
       setLoadingMenu(false);
     }
@@ -200,7 +199,7 @@ export default function BookingPage() {
 
         if (!ok) {
           throw new Error(
-            `Maaf, stok "${item.name}" untuk slot ${pickupTime} dah habis. Sila kurangkan kuantiti atau pilih slot lain.`
+            `Sorry, stock for "${item.name}" at slot ${pickupTime} is sold out. Please reduce quantity or choose another slot.`
           );
         }
 
@@ -226,8 +225,8 @@ export default function BookingPage() {
         const waPhone = "60148564742"; 
         const itemsList = items.map((i) => `${i.quantity}x ${i.name}`).join('%0A');
         const message =
-          `*TEMPAHAN BARU BAGIRASA*%0A%0A` +
-          `Nama: ${name}%0ASlot: ${slot} (Khamis, 23 Julai 2026)%0A%0A` +
+          `*NEW BAGIRASA ORDER*%0A%0A` +
+          `Name: ${name}%0ASlot: ${slot} (Thursday, 23 July 2026)%0A%0A` +
           `Order:%0A${itemsList}%0A%0A` +
           `Total: RM${total.toFixed(2)}`;
         window.open(`https://wa.me/${waPhone}?text=${message}`, '_blank');
@@ -252,7 +251,7 @@ export default function BookingPage() {
       await fetchMenu();
     } catch (err: any) {
       console.error("Booking failed:", err);
-      setError(err.message || "Sesuatu tidak kena. Sila cuba lagi.");
+      setError(err.message || "Something went wrong. Please try again.");
 
       for (const item of succeeded) {
         if (isSlotLimited(item.name)) {
@@ -298,18 +297,18 @@ export default function BookingPage() {
           </div>
         </div>
 
-        {/* HEADER & SUB TEXT ASAL */}
+        {/* HEADER & SUB TEXT */}
         <div className="text-center space-y-2 pb-2">
           <h2 className="text-xl sm:text-2xl font-serif text-stone-900">A Premium Viral Salt Bread</h2>
           <p className="text-stone-500 text-xs sm:text-sm font-normal max-w-md mx-auto">
-            Crispy outside, fluffy inside with melted French butter. Freshly baked for your pickup on <strong>Khamis, 23 Julai 2026</strong>.
+            Crispy outside, fluffy inside with melted French butter. Freshly baked for your pickup on <strong>Thursday, 23 July 2026</strong>.
           </p>
         </div>
 
-        {/* PILIH SLOT PICKUP (KHAMIS, 23 JULAI 2026) */}
+        {/* PICKUP SLOT SELECTION */}
         <div className="pt-2 bg-stone-100/70 p-4 rounded-2xl border border-stone-200/60">
           <label className="block text-[11px] font-bold tracking-widest text-stone-700 uppercase mb-2 text-center">
-            Pilih Slot Pick Up (Khamis, 23 Julai 2026)
+            Select Pickup Slot (Thursday, 23 July 2026)
           </label>
           <div className="grid grid-cols-2 gap-3">
             {SLOTS.map((time) => (
@@ -329,7 +328,7 @@ export default function BookingPage() {
           </div>
           {!pickupTime && (
             <p className="text-[11px] text-amber-700 font-medium mt-2 text-center">
-              * Sila pilih slot pick up di atas dahulu untuk mengaktifkan pilihan menu & stok.
+              * Please select a pickup slot above first to unlock menu items & stock availability.
             </p>
           )}
         </div>
@@ -352,14 +351,14 @@ export default function BookingPage() {
           </div>
         </div>
 
-        {/* MENU LIST DENGAN DESCRIPTION ASAL */}
+        {/* MENU LIST */}
         <div className="space-y-6 pt-4">
-          <h3 className="text-2xl font-serif text-stone-900 border-b border-stone-200 pb-2">Menu Pilihan</h3>
+          <h3 className="text-2xl font-serif text-stone-900 border-b border-stone-200 pb-2">Menu</h3>
 
           {loadingMenu ? (
-            <p className="text-center py-6 text-stone-400">Memuatkan menu...</p>
+            <p className="text-center py-6 text-stone-400">Loading menu...</p>
           ) : breads.length === 0 ? (
-            <p className="text-center py-8 text-stone-400">Tiada menu dijumpai dalam database.</p>
+            <p className="text-center py-8 text-stone-400">No menu found in database.</p>
           ) : (
             <div className="space-y-6">
               {breads.map((bread) => {
@@ -382,14 +381,14 @@ export default function BookingPage() {
 
                     <div className="inline-block bg-stone-100 px-2 py-0.5 rounded text-[10px] font-semibold text-stone-500 uppercase tracking-wider border border-stone-200/40">
                       {needsSlotFirst
-                        ? "Pilih slot dahulu"
+                        ? "Select slot first"
                         : isSoldOut
                         ? "Sold Out"
-                        : `${availableStock} Unit Tersedia${limited ? ` (${pickupTime})` : ''}`}
+                        : `${availableStock} Units Available${limited ? ` (${pickupTime})` : ''}`}
                     </div>
 
                     <div className="flex justify-between items-center pt-2">
-                      <span className="text-[10px] font-bold tracking-widest text-stone-400 uppercase">Kuantiti:</span>
+                      <span className="text-[10px] font-bold tracking-widest text-stone-400 uppercase">Quantity:</span>
                       <div className="flex items-center space-x-4">
                         <button
                           type="button"
@@ -423,20 +422,20 @@ export default function BookingPage() {
           )}
         </div>
 
-        {/* BOOKING FORM DENGAN PLACEHOLDER AHMAD ALBAB */}
+        {/* BOOKING FORM */}
         <form onSubmit={handleBooking} className="space-y-6 pt-6 border-t border-stone-200">
-          <h3 className="text-2xl font-serif text-stone-900">Pengesahan Tempahan</h3>
+          <h3 className="text-2xl font-serif text-stone-900">Order Confirmation</h3>
 
           <div className="bg-stone-100/60 rounded-xl p-5 border border-stone-200/60">
             <div className="flex justify-between items-center text-xs font-bold tracking-widest text-stone-400 uppercase border-b border-stone-200/80 pb-3 mb-4">
-              <span>Item Dipilih</span>
+              <span>Selected Items</span>
               <span className="bg-stone-200 text-stone-700 px-2.5 py-1 rounded-full text-[10px] font-bold">
-                {totalItemsCount} Unit
+                {totalItemsCount} Units
               </span>
             </div>
 
             {totalItemsCount === 0 ? (
-              <p className="text-xs text-stone-400 text-center py-4">Sila pilih slot pick up dan kuantiti roti di atas.</p>
+              <p className="text-xs text-stone-400 text-center py-4">Please select a pickup slot and quantities above.</p>
             ) : (
               <div className="space-y-3">
                 {Object.entries(quantities).map(([name, qty]) => {
@@ -456,24 +455,24 @@ export default function BookingPage() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-[10px] font-bold tracking-widest text-stone-400 uppercase mb-1">Nama Penuh</label>
+              <label className="block text-[10px] font-bold tracking-widest text-stone-400 uppercase mb-1">Full Name</label>
               <input
                 type="text"
                 required
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
-                placeholder="cth: Ahmad Albab"
+                placeholder="Ahmad Albab"
                 className="w-full bg-transparent border-b border-stone-300 py-2 text-stone-900 focus:outline-none focus:border-stone-900 text-sm"
               />
             </div>
             <div>
-              <label className="block text-[10px] font-bold tracking-widest text-stone-400 uppercase mb-1">Nombor Telefon</label>
+              <label className="block text-[10px] font-bold tracking-widest text-stone-400 uppercase mb-1">Phone Number</label>
               <input
                 type="tel"
                 required
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="cth: 0123456789"
+                placeholder="0123456789"
                 className="w-full bg-transparent border-b border-stone-300 py-2 text-stone-900 focus:outline-none focus:border-stone-900 text-sm"
               />
             </div>
@@ -485,7 +484,7 @@ export default function BookingPage() {
 
           <div className="pt-4 border-t border-stone-200 flex justify-between items-center">
             <div>
-              <span className="block text-[10px] font-bold tracking-widest text-stone-400 uppercase">Jumlah Harga</span>
+              <span className="block text-[10px] font-bold tracking-widest text-stone-400 uppercase">Total Price</span>
               <span className="block text-3xl font-serif text-stone-900">RM {calculateTotal().toFixed(2)}</span>
             </div>
             <button
@@ -493,7 +492,7 @@ export default function BookingPage() {
               disabled={submitting || totalItemsCount === 0 || !customerName || !phone || !pickupTime}
               className="bg-stone-900 hover:bg-stone-800 text-white px-6 py-3.5 rounded-xl text-xs font-bold tracking-widest uppercase transition-all disabled:opacity-50 shadow-md"
             >
-              {submitting ? "Memproses..." : "Hantar & WhatsApp"}
+              {submitting ? "Processing..." : "Submit & WhatsApp"}
             </button>
           </div>
         </form>
@@ -505,14 +504,14 @@ export default function BookingPage() {
           <div className="bg-[#faf8f5] rounded-3xl p-8 max-w-md w-full shadow-2xl border border-stone-200 text-stone-800 space-y-6">
             <div className="text-center space-y-2">
               <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-stone-950 text-white text-2xl font-serif mb-2">✓</div>
-              <h3 className="text-3xl font-serif text-stone-900">Tempahan Berjaya!</h3>
-              <p className="text-xs text-stone-400">Sila semak mesej WhatsApp yang terbuka secara automatik untuk pengesahan kepada seller.</p>
+              <h3 className="text-3xl font-serif text-stone-900">Booking Successful!</h3>
+              <p className="text-xs text-stone-400">Please check your WhatsApp window that has automatically opened to confirm your order with the seller.</p>
             </div>
             <button
               onClick={() => setConfirmedBooking(null)}
               className="w-full bg-stone-900 hover:bg-stone-800 text-white py-3 rounded-xl text-xs font-bold tracking-widest uppercase"
             >
-              Tutup
+              Close
             </button>
           </div>
         </div>
