@@ -115,8 +115,10 @@ export default function BookingPage() {
       return bread.available_stock;
     }
     if (!pickupTime) return 0; 
+    
+    // Pembersihan ruang kosong (trim) semasa membandingkan slot supaya padan dengan database
     const row = slotStocks.find(
-      (s) => s.bread_id === bread.id && s.slot === pickupTime
+      (s) => s.bread_id === bread.id && s.slot.trim() === pickupTime.trim()
     );
     return row?.available_stock ?? 0;
   };
@@ -187,7 +189,7 @@ export default function BookingPage() {
         if (isSlotLimited(item.name)) {
           const { data, error: rpcError } = await supabase.rpc('decrement_slot_stock', {
             p_bread_id: item.id,
-            p_slot: pickupTime,
+            p_slot: pickupTime.trim(),
             p_qty: item.quantity,
           });
           if (rpcError) throw rpcError;
@@ -261,7 +263,7 @@ export default function BookingPage() {
         if (isSlotLimited(item.name)) {
           await supabase.rpc('decrement_slot_stock', {
             p_bread_id: item.id,
-            p_slot: pickupTime,
+            p_slot: pickupTime.trim(),
             p_qty: -item.quantity, 
           });
         } else {
@@ -301,7 +303,7 @@ export default function BookingPage() {
           </div>
         </div>
 
-        {/* HEADER & SUB TEXT (Tanpa A Premium Viral Salt Bread) */}
+        {/* HEADER & SUB TEXT */}
         <div className="text-center space-y-2 pb-2">
           <p className="text-stone-500 text-xs sm:text-sm font-normal max-w-md mx-auto">
             Crispy outside, fluffy inside with melted butter. Freshly baked for your pickup on <strong>Thursday, 23 July 2026</strong>.
@@ -373,7 +375,7 @@ export default function BookingPage() {
 
         {/* MENU LIST */}
         <div className="space-y-6 pt-4">
-          <h3 className="text-2xl font-serif text-stone-900 border-b border-stone-200 pb-2">Menu</h3>
+          <h3 className="text-2xl font-serif text-stone-900 border-b border-stone-200 pb-2">Which one's hitting the spot today?</h3>
 
           {loadingMenu ? (
             <p className="text-center py-6 text-stone-400">Loading menu...</p>
