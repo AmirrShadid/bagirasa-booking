@@ -3,16 +3,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 
-// Breads managed by time slots
+// Breads managed by time slots (Original, Chocolate, & Korean Cream Cheese)
 const SLOT_LIMITED_BREADS = [
   'Original Salt Bread', 
   'Chocolate Salt Bread', 
   'Korean Cream Cheese'
 ];
+const SLOTS = ['4:00 PM', '8:30 PM'];
 
 interface SaltBread {
   id: number;
-  name: number | string;
+  name: string;
   price: number;
   available_stock: number;
   description?: string;
@@ -82,10 +83,10 @@ export default function BookingPage() {
       if (slotError) throw slotError;
 
       const descriptionsMap: Record<string, string> = {
-        'Original Salt Bread': 'Crispy on the outside, soft, fluffy, and buttery on the inside. Topped with a sprinkle of pretzel salt.',
-        'Chocolate Salt Bread': 'Rich chocolate dough with a molten callebaut center, crispy crust and a pinch of pretzel salt.',
+        'Original Salt Bread': 'Classic French butter wrapped in soft dough, topped with flaky sea salt.',
+        'Chocolate Salt Bread': 'Rich dark chocolate filling with a sweet and salty crust finish.',
         'Korean Cream Cheese': 'Stuffed with a rich, velvety cream cheese filling, featuring a crispy crust and a touch of pretzel salt.',
-        'Garlic': 'Brushed with aromatic garlic butter, featuring a crispy crust, a soft, fluffy interior, and a savory pretzel salt finish..',
+        'Garlic': 'Piping hot buttery garlic spread infused with herbs and melted cheese goodness.',
         'Crab Rangoon': 'Crispy cheesy crab filling wrapped in our signature salt bread.'
       };
 
@@ -295,12 +296,12 @@ export default function BookingPage() {
             className="w-full h-full object-cover brightness-95"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex flex-col justify-end p-6 text-white">
-            <span className="text-[10px] font-bold tracking-widest uppercase text-amber-200">Crafted Fresh, Worth the Wait</span>
+            <span className="text-[10px] font-bold tracking-widest uppercase text-amber-200">Craft Fresh • Daily Batch</span>
             <h1 className="text-3xl sm:text-4xl font-serif tracking-tight">Bagirasa Salt Bread</h1>
           </div>
         </div>
 
-        {/* HEADER & SUB TEXT */}
+        {/* HEADER & SUB TEXT (Tanpa A Premium Viral Salt Bread) */}
         <div className="text-center space-y-2 pb-2">
           <p className="text-stone-500 text-xs sm:text-sm font-normal max-w-md mx-auto">
             Crispy outside, fluffy inside with melted French butter. Freshly baked for your pickup on <strong>Thursday, 23 July 2026</strong>.
@@ -313,7 +314,7 @@ export default function BookingPage() {
             Select Pickup Slot (Thursday, 23 July 2026)
           </label>
           <div className="grid grid-cols-2 gap-3">
-            {SLOTS.map((time) => (
+            {SLOTS.map((time: string) => (
               <button
                 key={time}
                 type="button"
@@ -346,8 +347,6 @@ export default function BookingPage() {
           <div className="flex flex-wrap justify-center gap-3">
             {breads.map((bread) => {
               const nameStr = String(bread.name);
-              
-              // Fungsi untuk ubah paparan teks nama roti khusus untuk kotak live stock ni
               let displayName = nameStr;
               let isTwoLine = false;
 
@@ -356,7 +355,7 @@ export default function BookingPage() {
               } else if (nameStr === 'Chocolate Salt Bread') {
                 displayName = 'CHOCOLATE';
               } else if (nameStr === 'Korean Cream Cheese') {
-                displayName = 'KOREAN CREAM\nCHEESE'; // Pecah dua baris
+                displayName = 'KOREAN CREAM\nCHEESE';
                 isTwoLine = true;
               }
 
@@ -374,7 +373,7 @@ export default function BookingPage() {
 
         {/* MENU LIST */}
         <div className="space-y-6 pt-4">
-          <h3 className="text-2xl font-serif text-stone-900 border-b border-stone-200 pb-2">Which one's hitting the spot today?</h3>
+          <h3 className="text-2xl font-serif text-stone-900 border-b border-stone-200 pb-2">Menu</h3>
 
           {loadingMenu ? (
             <p className="text-center py-6 text-stone-400">Loading menu...</p>
@@ -482,7 +481,7 @@ export default function BookingPage() {
                 required
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
-                placeholder="Ahmad Albab"
+                placeholder="e.g: Ahmad Albab"
                 className="w-full bg-transparent border-b border-stone-300 py-2 text-stone-900 focus:outline-none focus:border-stone-900 text-sm"
               />
             </div>
@@ -493,7 +492,7 @@ export default function BookingPage() {
                 required
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="0123456789"
+                placeholder="e.g: 0123456789"
                 className="w-full bg-transparent border-b border-stone-300 py-2 text-stone-900 focus:outline-none focus:border-stone-900 text-sm"
               />
             </div>
