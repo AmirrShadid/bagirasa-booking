@@ -304,7 +304,7 @@ export default function BookingPage() {
         {/* HEADER & SUB TEXT (Tanpa A Premium Viral Salt Bread) */}
         <div className="text-center space-y-2 pb-2">
           <p className="text-stone-500 text-xs sm:text-sm font-normal max-w-md mx-auto">
-            Crispy outside, fluffy inside with melted French butter. Freshly baked for your pickup on <strong>Thursday, 23 July 2026</strong>.
+            Crispy outside, fluffy inside with melted butter. Freshly baked for your pickup on <strong>Thursday, 23 July 2026</strong>.
           </p>
         </div>
 
