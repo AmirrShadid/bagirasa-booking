@@ -301,7 +301,7 @@ export default function BookingPage() {
         <div className="text-center space-y-2 pb-2">
           <h2 className="text-xl sm:text-2xl font-serif text-stone-900">A Premium Viral Salt Bread</h2>
           <p className="text-stone-500 text-xs sm:text-sm font-normal max-w-md mx-auto">
-            Crispy outside, fluffy inside with melted butter. Freshly baked for your pickup on <strong>Thursday, 23 July 2026</strong>.
+            Crispy outside, fluffy inside with melted French butter. Freshly baked for your pickup on <strong>Thursday, 23 July 2026</strong>.
           </p>
         </div>
 
