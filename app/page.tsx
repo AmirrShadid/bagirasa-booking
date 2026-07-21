@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 
-// Roti yang dikawal ketat mengikut slot masa (Contoh: 4 ketul per slot untuk Original, 7 untuk Choc)
+// Roti yang dikawal mengikut slot masa
 const SLOT_LIMITED_BREADS = ['Original Salt Bread', 'Chocolate Salt Bread'];
 const SLOTS = ['4:00 PM', '8:30 PM'];
 
@@ -67,7 +67,7 @@ export default function BookingPage() {
       const { data: menuData, error: menuError } = await supabase
         .from('salt_breads')
         .select('id, name, price, available_stock')
-        .order('name', { ascending: true });
+        .order('id', { ascending: true });
 
       if (menuError) throw menuError;
 
@@ -81,7 +81,7 @@ export default function BookingPage() {
       setSlotStocks(slotData || []);
     } catch (err) {
       console.error("fetchMenu failed:", err);
-      setError("Gagal memuatkan menu. Sila muat semula halaman.");
+      setError("Gagal memuatkan menu. Sila semak sambungan Supabase.");
     } finally {
       setLoadingMenu(false);
     }
@@ -266,18 +266,28 @@ export default function BookingPage() {
 
   return (
     <div className="min-h-screen bg-stone-900 py-12 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-start overflow-y-auto font-sans">
-      <div className="max-w-xl w-full space-y-8 bg-[#faf8f5] rounded-3xl p-8 sm:p-10 shadow-2xl text-stone-800 border border-stone-200">
+      <div className="max-w-xl w-full space-y-8 bg-[#faf8f5] rounded-3xl p-6 sm:p-10 shadow-2xl text-stone-800 border border-stone-200">
 
-        <div className="text-center space-y-3 pb-6 border-b border-stone-200">
-          <h1 className="text-4xl sm:text-5xl font-serif text-stone-900 tracking-tight leading-none">
-            Bagirasa Salt Bread
-          </h1>
-          <p className="text-stone-500 text-sm sm:text-base font-normal max-w-md mx-auto pt-2">
+        {/* HERO IMAGE BANNER */}
+        <div className="relative w-full h-48 sm:h-56 rounded-2xl overflow-hidden shadow-md bg-stone-200">
+          <img
+            src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=1000"
+            alt="Bagirasa Salt Bread"
+            className="w-full h-full object-cover brightness-90"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex flex-col justify-end p-6 text-white">
+            <span className="text-[10px] font-bold tracking-widest uppercase text-amber-200">Freshly Baked Daily</span>
+            <h1 className="text-3xl sm:text-4xl font-serif tracking-tight">Bagirasa Salt Bread</h1>
+          </div>
+        </div>
+
+        <div className="text-center space-y-2 pb-2">
+          <p className="text-stone-500 text-xs sm:text-sm font-normal max-w-md mx-auto">
             Pilih slot masa pengambilan anda. Dibakar segar khusus untuk batch hari ini.
           </p>
         </div>
 
-        {/* PILIH SLOT */}
+        {/* PILIH SLOT (4:00 PM / 8:30 PM) */}
         <div className="pt-2">
           <label className="block text-[10px] font-bold tracking-widest text-stone-400 uppercase mb-2">
             Pilih Slot Pickup (4:00 PM atau 8:30 PM)
@@ -290,7 +300,7 @@ export default function BookingPage() {
                 onClick={() => handlePickupTimeChange(time)}
                 className={`py-3 rounded-xl text-sm font-bold border transition-all ${
                   pickupTime === time
-                    ? 'bg-stone-900 text-white border-stone-900'
+                    ? 'bg-stone-900 text-white border-stone-900 shadow-sm'
                     : 'bg-white border-stone-200 text-stone-600 hover:border-stone-400'
                 }`}
               >
@@ -299,37 +309,27 @@ export default function BookingPage() {
             ))}
           </div>
           {!pickupTime && (
-            <p className="text-[11px] text-stone-400 mt-2">
-              * Sila pilih slot masa dahulu untuk melihat baki stok yang tersedia.
+            <p className="text-[11px] text-amber-600 font-medium mt-2">
+              * Sila pilih slot masa di atas dahulu untuk melihat baki stok yang tersedia.
             </p>
           )}
         </div>
 
-        {/* LIVE COUNTER */}
+        {/* LIVE COUNTER DINAMIK */}
         <div className="py-2">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-xs font-bold tracking-widest text-stone-400 uppercase">
-              Live Stock Status (Total Keseluruhan)
+              Live Stock Status
             </h3>
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-stone-100 rounded-lg p-3 text-center border border-stone-200/60">
-              <span className="block text-2xl font-serif text-stone-900">{getCombinedSlotTotal('Original Salt Bread')}</span>
-              <span className="text-[10px] font-bold text-stone-400 uppercase block mt-1">Original</span>
-            </div>
-            <div className="bg-stone-100 rounded-lg p-3 text-center border border-stone-200/60">
-              <span className="block text-2xl font-serif text-stone-900">{getCombinedSlotTotal('Chocolate Salt Bread')}</span>
-              <span className="text-[10px] font-bold text-stone-400 uppercase block mt-1">Choc</span>
-            </div>
-            <div className="bg-stone-100 rounded-lg p-3 text-center border border-stone-200/60">
-              <span className="block text-2xl font-serif text-stone-900">{getCombinedSlotTotal('Korean Cream Cheese')}</span>
-              <span className="text-[10px] font-bold text-stone-400 uppercase block mt-1">Cream Cheese</span>
-            </div>
-            <div className="bg-stone-100 rounded-lg p-3 text-center border border-stone-200/60">
-              <span className="block text-2xl font-serif text-stone-900">{getCombinedSlotTotal('Garlic')}</span>
-              <span className="text-[10px] font-bold text-stone-400 uppercase block mt-1">Garlic</span>
-            </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {breads.map((bread) => (
+              <div key={bread.id} className="bg-stone-100 rounded-xl p-3 text-center border border-stone-200/60 shadow-xs">
+                <span className="block text-xl font-serif text-stone-900">{getCombinedSlotTotal(bread.name)}</span>
+                <span className="text-[10px] font-bold text-stone-500 uppercase block mt-1 truncate">{bread.name}</span>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -340,9 +340,9 @@ export default function BookingPage() {
           {loadingMenu ? (
             <p className="text-center py-6 text-stone-400">Memuatkan menu...</p>
           ) : breads.length === 0 ? (
-            <p className="text-center py-8 text-stone-400">Tiada menu tersedia buat masa ini.</p>
+            <p className="text-center py-8 text-stone-400">Tiada menu dijumpai dalam database.</p>
           ) : (
-            <div className="space-y-8">
+            <div className="space-y-6">
               {breads.map((bread) => {
                 const qty = quantities[bread.name] || 0;
                 const limited = isSlotLimited(bread.name);
@@ -351,10 +351,10 @@ export default function BookingPage() {
                 const isSoldOut = !needsSlotFirst && availableStock <= 0;
 
                 return (
-                  <div key={bread.id} className={`space-y-3 pb-6 border-b border-stone-100 last:border-0 transition-opacity ${isSoldOut ? 'opacity-60' : 'opacity-100'}`}>
+                  <div key={bread.id} className={`space-y-2 pb-6 border-b border-stone-100 last:border-0 transition-opacity ${isSoldOut ? 'opacity-50' : 'opacity-100'}`}>
                     <div className="flex justify-between items-center">
-                      <h3 className="text-xl font-serif text-stone-900">{bread.name}</h3>
-                      <span className="text-xl font-serif text-stone-900">RM {bread.price.toFixed(2)}</span>
+                      <h3 className="text-lg font-serif text-stone-900">{bread.name}</h3>
+                      <span className="text-lg font-serif text-stone-900">RM {bread.price.toFixed(2)}</span>
                     </div>
 
                     <div className="inline-block bg-stone-100 px-2 py-0.5 rounded text-[10px] font-semibold text-stone-500 uppercase tracking-wider border border-stone-200/40">
@@ -365,7 +365,7 @@ export default function BookingPage() {
                         : `${availableStock} Unit Tersedia${limited ? ` (${pickupTime})` : ''}`}
                     </div>
 
-                    <div className="flex justify-between items-center pt-2 border-t border-stone-100">
+                    <div className="flex justify-between items-center pt-2">
                       <span className="text-[10px] font-bold tracking-widest text-stone-400 uppercase">Kuantiti:</span>
                       <div className="flex items-center space-x-4">
                         <button
@@ -413,7 +413,7 @@ export default function BookingPage() {
             </div>
 
             {totalItemsCount === 0 ? (
-              <p className="text-xs text-stone-400 text-center py-4">Sila pilih slot dan kuantiti di atas.</p>
+              <p className="text-xs text-stone-400 text-center py-4">Sila pilih slot dan kuantiti roti di atas.</p>
             ) : (
               <div className="space-y-3">
                 {Object.entries(quantities).map(([name, qty]) => {
@@ -468,7 +468,7 @@ export default function BookingPage() {
             <button
               type="submit"
               disabled={submitting || totalItemsCount === 0 || !customerName || !phone || !pickupTime}
-              className="bg-stone-900 hover:bg-stone-800 text-white px-6 py-3.5 rounded-xl text-xs font-bold tracking-widest uppercase transition-all disabled:opacity-50"
+              className="bg-stone-900 hover:bg-stone-800 text-white px-6 py-3.5 rounded-xl text-xs font-bold tracking-widest uppercase transition-all disabled:opacity-50 shadow-md"
             >
               {submitting ? "Memproses..." : "Hantar & WhatsApp"}
             </button>
@@ -483,7 +483,7 @@ export default function BookingPage() {
             <div className="text-center space-y-2">
               <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-stone-950 text-white text-2xl font-serif mb-2">✓</div>
               <h2 className="text-3xl font-serif text-stone-900">Tempahan Berjaya!</h2>
-              <p className="text-xs text-stone-400">Sila semak mesej WhatsApp yang terbuka secara automatik.</p>
+              <p className="text-xs text-stone-400">Sila semak mesej WhatsApp yang terbuka secara automatik untuk pengesahan kepada seller.</p>
             </div>
             <button
               onClick={() => setConfirmedBooking(null)}
