@@ -292,7 +292,7 @@ export default function BookingPage() {
             className="w-full h-full object-cover brightness-95"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex flex-col justify-end p-6 text-white">
-            <span className="text-[10px] font-bold tracking-widest uppercase text-amber-200">Craft Fresh • Daily Batch</span>
+            <span className="text-[10px] font-bold tracking-widest uppercase text-amber-200">Craft Fresh</span>
             <h1 className="text-3xl sm:text-4xl font-serif tracking-tight">Bagirasa Salt Bread</h1>
           </div>
         </div>
@@ -342,13 +342,32 @@ export default function BookingPage() {
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
           </div>
           <div className="flex flex-wrap justify-center gap-3">
-            {breads.map((bread) => (
-                <div key={bread.id} className="bg-stone-100 rounded-xl p-3 text-center border border-stone-200/60 shadow-xs w-[calc(33.333%-0.5rem)] min-w-[130px]">
-                <span className="block text-xl font-serif text-stone-900">{getCombinedSlotTotal(String(bread.name))}</span>
-                <span className="text-[10px] font-bold text-stone-500 uppercase block mt-1 truncate">{String(bread.name)}</span>
+            {breads.map((bread) => {
+              const nameStr = String(bread.name);
+              
+              // Fungsi untuk ubah paparan teks nama roti khusus untuk kotak live stock ni
+              let displayName = nameStr;
+              let isTwoLine = false;
+
+              if (nameStr === 'Original Salt Bread') {
+                displayName = 'ORIGINAL';
+              } else if (nameStr === 'Chocolate Salt Bread') {
+                displayName = 'CHOCOLATE';
+              } else if (nameStr === 'Korean Cream Cheese') {
+                displayName = 'KOREAN CREAM\nCHEESE'; // Pecah dua baris
+                isTwoLine = true;
+              }
+
+              return (
+                <div key={bread.id} className="bg-stone-100 rounded-xl p-3.5 text-center border border-stone-200/60 shadow-xs w-[calc(33.333%-0.5rem)] min-w-[130px]">
+                  <span className="block text-2xl font-serif text-stone-900">{getCombinedSlotTotal(nameStr)}</span>
+                  <span className={`text-[11px] font-bold text-stone-600 uppercase block mt-1 tracking-wide ${isTwoLine ? 'whitespace-pre-line leading-tight' : 'truncate'}`}>
+                    {displayName}
+                  </span>
                 </div>
-            ))}
-            </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* MENU LIST */}
