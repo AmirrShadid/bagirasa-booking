@@ -292,7 +292,7 @@ export default function BookingPage() {
             className="w-full h-full object-cover brightness-95"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex flex-col justify-end p-6 text-white">
-            <span className="text-[10px] font-bold tracking-widest uppercase text-amber-200">Craft Fresh</span>
+            <span className="text-[10px] font-bold tracking-widest uppercase text-amber-200">Crafted Fresh, Worth the Wait</span>
             <h1 className="text-3xl sm:text-4xl font-serif tracking-tight">Bagirasa Salt Bread</h1>
           </div>
         </div>
