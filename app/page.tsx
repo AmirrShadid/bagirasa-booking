@@ -372,7 +372,7 @@ export default function BookingPage() {
 
         {/* MENU LIST */}
         <div className="space-y-6 pt-4">
-          <h3 className="text-2xl font-serif text-stone-900 border-b border-stone-200 pb-2">Menu</h3>
+          <h3 className="text-2xl font-serif text-stone-900 border-b border-stone-200 pb-2">Which one's hitting the spot today?</h3>
 
           {loadingMenu ? (
             <p className="text-center py-6 text-stone-400">Loading menu...</p>
