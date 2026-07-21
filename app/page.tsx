@@ -4,8 +4,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 
 // Breads managed by time slots
-const SLOT_LIMITED_BREADS = ['Original Salt Bread', 'Chocolate Salt Bread'];
-const SLOTS = ['4:00 PM', '8:30 PM'];
+const SLOT_LIMITED_BREADS = [
+  'Original Salt Bread', 
+  'Chocolate Salt Bread', 
+  'Korean Cream Cheese'
+];
 
 interface SaltBread {
   id: number;
