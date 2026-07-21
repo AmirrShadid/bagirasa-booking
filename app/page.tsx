@@ -287,7 +287,7 @@ export default function BookingPage() {
         {/* HERO IMAGE */}
         <div className="relative w-full h-52 sm:h-60 rounded-2xl overflow-hidden shadow-md bg-stone-200">
           <img
-            src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=1000"
+            src="salt-bread-hero.jpeg"
             alt="Bagirasa Salt Bread"
             className="w-full h-full object-cover brightness-95"
           />
@@ -341,14 +341,14 @@ export default function BookingPage() {
             </h3>
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div className="flex flex-wrap justify-center gap-3">
             {breads.map((bread) => (
-              <div key={bread.id} className="bg-stone-100 rounded-xl p-3 text-center border border-stone-200/60 shadow-xs">
+                <div key={bread.id} className="bg-stone-100 rounded-xl p-3 text-center border border-stone-200/60 shadow-xs w-[calc(33.333%-0.5rem)] min-w-[130px]">
                 <span className="block text-xl font-serif text-stone-900">{getCombinedSlotTotal(String(bread.name))}</span>
                 <span className="text-[10px] font-bold text-stone-500 uppercase block mt-1 truncate">{String(bread.name)}</span>
-              </div>
+                </div>
             ))}
-          </div>
+            </div>
         </div>
 
         {/* MENU LIST */}
