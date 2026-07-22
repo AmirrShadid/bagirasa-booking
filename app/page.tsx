@@ -231,7 +231,7 @@ export default function BookingPage() {
         const waPhone = "60148564742"; 
         const itemsList = items.map((i) => `${i.quantity}x ${i.name}`).join('%0A');
         const message =
-          `*NEW BAGIRASA ORDER*%0A%0A` +
+          `*NEW SALT BREAD ORDER*%0A%0A` +
           `Name: ${name}%0ASlot: ${slot} (Thursday, 23 July 2026)%0A%0A` +
           `Order:%0A${itemsList}%0A%0A` +
           `Total: RM${total.toFixed(2)}`;
