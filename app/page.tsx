@@ -488,7 +488,7 @@ export default function BookingPage() {
               />
             </div>
             <div>
-              <label className="block text-[10px] font-bold tracking-widest text-stone-400 uppercase mb-1">Phone Number</label>
+              <label className="block text-[10px] font-bold tracking-widest text-stone-400 uppercase mb-1">Phone Number (Wwhatsapp)</label>
               <input
                 type="tel"
                 required
