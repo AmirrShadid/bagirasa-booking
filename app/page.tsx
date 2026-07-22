@@ -527,7 +527,7 @@ export default function BookingPage() {
             <div className="text-center space-y-2">
               <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-stone-950 text-white text-2xl font-serif mb-2">✓</div>
               <h3 className="text-3xl font-serif text-stone-900">Booking Successful!</h3>
-              <p className="text-xs text-stone-400">Please check your WhatsApp window that has automatically opened to confirm your order with the seller.</p>
+              <p className="text-xs text-stone-400">Please check your WhatsApp window that has automatically opened to confirm your order with the us.</p>
             </div>
             <button
               onClick={() => setConfirmedBooking(null)}
