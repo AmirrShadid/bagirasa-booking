@@ -232,7 +232,7 @@ export default function BookingPage() {
         const itemsList = items.map((i) => `${i.quantity}x ${i.name}`).join('%0A');
         const message =
           `*NEW SALT BREAD ORDER*%0A%0A` +
-          `Name: ${name}%0ASlot: ${slot} (Thursday, 23 July 2026)%0A%0A` +
+          `Name: ${name}%0ASlot: ${slot} (Monday, 27 July 2026)%0A%0A` +
           `Order:%0A${itemsList}%0A%0A` +
           `Total: RM${total.toFixed(2)}`;
         window.open(`https://wa.me/${waPhone}?text=${message}`, '_blank');
@@ -306,14 +306,14 @@ export default function BookingPage() {
         {/* HEADER & SUB TEXT */}
         <div className="text-center space-y-2 pb-2">
           <p className="text-stone-500 text-xs sm:text-sm font-normal max-w-md mx-auto">
-            Crispy outside, fluffy inside with melted butter. Freshly baked for your pickup on <strong>Thursday, 23 July 2026</strong>.
+            Crispy outside, fluffy inside with melted butter. Freshly baked for your pickup on <strong>Monday, 27 July 2026</strong>.
           </p>
         </div>
 
         {/* PICKUP SLOT SELECTION */}
         <div className="pt-2 bg-stone-100/70 p-4 rounded-2xl border border-stone-200/60">
           <label className="block text-[11px] font-bold tracking-widest text-stone-700 uppercase mb-2 text-center">
-            Select Pickup Slot (Thursday, 23 July 2026)
+            Select Pickup Slot (Monday, 227 July 2026)
           </label>
           <div className="grid grid-cols-2 gap-3">
             {SLOTS.map((time: string) => (

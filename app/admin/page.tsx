@@ -16,7 +16,7 @@ const getDateKey = (isoString: string): string => {
   }); // hasil cth: "2026-07-23"
 };
 
-// Format tarikh untuk paparan (cth: "Thursday, 23 July 2026")
+// Format tarikh untuk paparan (cth: "Monday, 27 July 2026")
 const formatDateLabel = (dateKey: string): string => {
   const [year, month, day] = dateKey.split('-').map(Number);
   const d = new Date(year, month - 1, day);
