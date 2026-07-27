@@ -313,7 +313,7 @@ export default function BookingPage() {
         {/* PICKUP SLOT SELECTION */}
         <div className="pt-2 bg-stone-100/70 p-4 rounded-2xl border border-stone-200/60">
           <label className="block text-[11px] font-bold tracking-widest text-stone-700 uppercase mb-2 text-center">
-            Select Pickup Slot (Monday, 227 July 2026)
+            Select Pickup Slot (Monday, 27 July 2026)
           </label>
           <div className="grid grid-cols-2 gap-3">
             {SLOTS.map((time: string) => (
