@@ -193,7 +193,7 @@ export default function AdminPage() {
             onClick={handleLogout}
             className="text-xs font-bold text-stone-500 hover:text-stone-900 uppercase tracking-wide"
           >
-            Log Keluar
+            Log Out
           </button>
         </div>
 
