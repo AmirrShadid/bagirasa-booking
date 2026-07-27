@@ -83,10 +83,10 @@ export default function BookingPage() {
       if (slotError) throw slotError;
 
       const descriptionsMap: Record<string, string> = {
-        'Original Salt Bread': 'Classic French butter wrapped in soft dough, topped with flaky sea salt.',
-        'Chocolate Salt Bread': 'Rich dark chocolate filling with a sweet and salty crust finish.',
+        'Original Salt Bread': 'Classic French butter wrapped in soft dough, topped with pretzel salt.',
+        'Chocolate Salt Bread': 'Rich callebaut chocolate filling with a sweet and salty crust finish.',
         'Korean Cream Cheese': 'Stuffed with a rich, velvety cream cheese filling, featuring a crispy crust and a touch of pretzel salt.',
-        'Garlic': 'Piping hot buttery garlic spread infused with herbs and melted cheese goodness.',
+        'Garlic': 'Piping buttery garlic spread infused with herbs and melted cheese goodness.',
         'Crab Rangoon': 'Crispy cheesy crab filling wrapped in our signature salt bread.'
       };
 
