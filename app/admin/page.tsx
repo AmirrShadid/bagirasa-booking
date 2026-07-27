@@ -140,7 +140,7 @@ export default function AdminPage() {
             onChange={(e) => setSelectedDate(e.target.value)}
             className="border border-stone-200 rounded-lg px-3 py-2 text-xs font-bold text-stone-700 bg-white uppercase tracking-wide"
           >
-            <option value="all">Semua Tarikh</option>
+            <option value="all">All dates</option>
             {availableDates.map((dateKey) => (
               <option key={dateKey} value={dateKey}>
                 {formatDateLabel(dateKey)}
