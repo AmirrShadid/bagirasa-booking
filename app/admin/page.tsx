@@ -16,7 +16,7 @@ const getDateKey = (isoString: string): string => {
   }); // hasil cth: "2026-07-23"
 };
 
-// Format tarikh untuk paparan (cth: "Thursday, 23 July 2026")
+// Format tarikh untuk paparan (cth: "Monday, 27 July 2026")
 const formatDateLabel = (dateKey: string): string => {
   const [year, month, day] = dateKey.split('-').map(Number);
   const d = new Date(year, month - 1, day);
@@ -58,6 +58,17 @@ export default function AdminPage() {
     };
   }, []);
 
+  useEffect(() => {
+    async function fetchBookings() {
+      const { data } = await supabase
+        .from('bookings')
+        .select('*')
+        .order('pickup_time', { ascending: true });
+      if (data) setBookings(data);
+    }
+    if (isAuth) fetchBookings();
+  }, [isAuth]);
+
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoggingIn(true);
@@ -80,17 +91,6 @@ export default function AdminPage() {
     await supabase.auth.signOut();
     setIsAuth(false);
   }
-
-  useEffect(() => {
-    async function fetchBookings() {
-      const { data } = await supabase
-        .from('bookings')
-        .select('*')
-        .order('pickup_time', { ascending: true });
-      if (data) setBookings(data);
-    }
-    if (isAuth) fetchBookings();
-  }, [isAuth]);
 
   async function markAsPicked(id: string) {
     const { data, error } = await supabase
@@ -220,7 +220,7 @@ export default function AdminPage() {
             onChange={(e) => setSelectedDate(e.target.value)}
             className="border border-stone-200 rounded-lg px-3 py-2 text-xs font-bold text-stone-700 bg-white uppercase tracking-wide"
           >
-            <option value="all">Semua Tarikh</option>
+            <option value="all">All dates</option>
             {availableDates.map((dateKey) => (
               <option key={dateKey} value={dateKey}>
                 {formatDateLabel(dateKey)}
