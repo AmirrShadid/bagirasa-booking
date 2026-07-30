@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/lib/supabase';
 
 // Breads managed by time slots (Original, Chocolate, & Korean Garlic Cheese)
@@ -133,6 +133,22 @@ export default function BookingPage() {
     }
     return bread.available_stock;
   };
+
+  // Bagi "rank" untuk sorting: 0 = ada stock (atau belum pilih slot lagi), 1 = Sold Out.
+  // Guna rank ni supaya roti "Sold Out" automatik turun ke bawah senarai menu.
+  const getSortRank = (bread: SaltBread): number => {
+    const limited = isSlotLimited(bread.name);
+    const needsSlotFirst = limited && !pickupTime;
+    if (needsSlotFirst) return 0; // belum pilih slot -> jangan anggap sold out
+    const availableStock = getAvailableForBread(bread);
+    return availableStock <= 0 ? 1 : 0;
+  };
+
+  // Senarai roti untuk menu, disusun automatik: ada stock dulu, Sold Out kemudian.
+  // Array.sort() dalam JS stabil, jadi urutan asal (ikut id) dikekalkan dalam kumpulan yang sama.
+  const sortedBreadsForMenu = useMemo(() => {
+    return [...breads].sort((a, b) => getSortRank(a) - getSortRank(b));
+  }, [breads, slotStocks, pickupTime]);
 
   const updateQuantity = (bread: SaltBread, delta: number) => {
     const maxStock = getAvailableForBread(bread);
@@ -379,11 +395,11 @@ export default function BookingPage() {
 
           {loadingMenu ? (
             <p className="text-center py-6 text-stone-400">Loading menu...</p>
-          ) : breads.length === 0 ? (
+          ) : sortedBreadsForMenu.length === 0 ? (
             <p className="text-center py-8 text-stone-400">No menu found in database.</p>
           ) : (
             <div className="space-y-6">
-              {breads.map((bread) => {
+              {sortedBreadsForMenu.map((bread) => {
                 const breadName = String(bread.name);
                 const qty = quantities[breadName] || 0;
                 const limited = isSlotLimited(breadName);
