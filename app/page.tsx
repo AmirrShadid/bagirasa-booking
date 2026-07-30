@@ -3,11 +3,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 
-// Breads managed by time slots (Original, Chocolate, & Korean Cream Cheese)
+// Breads managed by time slots (Original, Chocolate, & Korean Garlic Cheese)
 const SLOT_LIMITED_BREADS = [
   'Original Salt Bread', 
   'Chocolate Salt Bread', 
-  'Korean Cream Cheese'
+  'Korean Garlic Cheese'
 ];
 const SLOTS = ['4:00 PM', '8:30 PM'];
 
@@ -85,7 +85,7 @@ export default function BookingPage() {
       const descriptionsMap: Record<string, string> = {
         'Original Salt Bread': 'Classic French butter wrapped in soft dough, topped with pretzel salt.',
         'Chocolate Salt Bread': 'Rich callebaut chocolate filling with a sweet and salty crust finish.',
-        'Korean Cream Cheese': 'Stuffed with a rich, velvety cream cheese filling, featuring a crispy crust and a touch of pretzel salt.',
+        'Korean Garlic Cheese': 'Stuffed with a rich, velvety garlic cheese filling, featuring a crispy crust and a touch of pretzel salt.',
         'Garlic': 'Piping buttery garlic spread infused with herbs and melted cheese goodness.',
         'Crab Rangoon': 'Crispy cheesy crab filling wrapped in our signature salt bread.'
       };
@@ -356,8 +356,8 @@ export default function BookingPage() {
                 displayName = 'ORIGINAL';
               } else if (nameStr === 'Chocolate Salt Bread') {
                 displayName = 'CHOCOLATE';
-              } else if (nameStr === 'Korean Cream Cheese') {
-                displayName = 'KOREAN CREAM\nCHEESE';
+              } else if (nameStr === 'Korean Garlic Cheese') {
+                displayName = 'KOREAN Garlic\nCHEESE';
                 isTwoLine = true;
               }
 
